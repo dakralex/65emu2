@@ -8,7 +8,7 @@
 #define SFEMU2_CPU_H
 
 void
-dis_asm_bin (FILE* fp);
+disassemble (const unsigned char* buf, size_t fsize, FILE* dest);
 
 int
 main (int argc, char* argv[]);
