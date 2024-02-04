@@ -6,11 +6,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "disasm.h"
 #include "opcodes.h"
 
 size_t
-read_file (const char* filename, unsigned char** dest)
+read_file (const char* filename, uint8_t** dest)
 {
   FILE* fp = fopen (filename, "rb");
 
@@ -50,77 +51,77 @@ print_accumulator (FILE* dest, const char name[])
 }
 
 void
-print_immediate (FILE* dest, const unsigned char* code, const char name[])
+print_immediate (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s #$%02x", name, code[1]);
 }
 
 void
-print_zero_page (FILE* dest, const unsigned char* code, const char name[])
+print_zero_page (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x", name, code[1]);
 }
 
 void
-print_zero_page_x (FILE* dest, const unsigned char* code, const char name[])
+print_zero_page_x (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x,X", name, code[1]);
 }
 
 void
-print_zero_page_y (FILE* dest, const unsigned char* code, const char name[])
+print_zero_page_y (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x,Y", name, code[1]);
 }
 
 void
-print_relative (FILE* dest, const unsigned char* code, const char name[])
+print_relative (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x", name, code[1]);
 }
 
 void
-print_absolute (FILE* dest, const unsigned char* code, const char name[])
+print_absolute (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x%02x", name, code[1], code[2]);
 }
 
 void
-print_absolute_x (FILE* dest, const unsigned char* code, const char name[])
+print_absolute_x (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x%02x,X", name, code[1], code[2]);
 }
 
 void
-print_absolute_y (FILE* dest, const unsigned char* code, const char name[])
+print_absolute_y (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x%02x,Y", name, code[1], code[2]);
 }
 
 void
-print_indirect (FILE* dest, const unsigned char* code, const char name[])
+print_indirect (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s $%02x", name, code[1]);
 }
 
 void
-print_indexed_indirect (FILE* dest, const unsigned char* code, const char name[])
+print_indexed_indirect (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s ($%02x,X)", name, code[1]);
 }
 
 void
-print_indirect_indexed (FILE* dest, const unsigned char* code, const char name[])
+print_indirect_indexed (FILE* dest, const uint8_t* code, const char name[])
 {
   fprintf (dest, "%s ($%02x),Y", name, code[1]);
 }
 
 void
-disassemble (const unsigned char* buf, size_t fsize, FILE* dest)
+disassemble (const uint8_t* buf, size_t fsize, FILE* dest)
 {
   unsigned int pc = 0;
   unsigned int op_len;
-  unsigned char const* code;
+  uint8_t const* code;
 
   while (pc < fsize) {
     op_len = 1;
@@ -716,9 +717,10 @@ int
 main (int argc, char* argv[])
 {
   if (argc == 2) {
-    unsigned char* buf;
+    uint8_t* buf;
     size_t fsize = read_file (argv[1], &buf);
     disassemble (buf, fsize, stdout);
+    free (buf);
   } else {
     fprintf (stderr, "Usage: %s [FILE]\n", argv[0]);
     exit (EXIT_FAILURE);
