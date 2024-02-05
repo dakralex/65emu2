@@ -4,8 +4,8 @@
  * Disassembler for MOS 6502 binaries.
  */
 
-#ifndef SFEMU2_CPU_H
-#define SFEMU2_CPU_H
+#ifndef INC_65EMU2_DIS_ASM_H
+#define INC_65EMU2_DIS_ASM_H
 
 void
 disassemble (const unsigned char* buf, size_t fsize, FILE* dest);
@@ -13,4 +13,4 @@ disassemble (const unsigned char* buf, size_t fsize, FILE* dest);
 int
 main (int argc, char* argv[]);
 
-#endif //SFEMU2_CPU_H
+#endif //INC_65EMU2_DIS_ASM_H

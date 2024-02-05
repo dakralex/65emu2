@@ -4,10 +4,11 @@
  * Definition of the instructions of a MOS 6502 CPU with their respective op codes.
  */
 
-#ifndef SFEMU2_OPCODES_H
-#define SFEMU2_OPCODES_H
+#ifndef INC_65EMU2_OPCODES_H
+#define INC_65EMU2_OPCODES_H
 
-enum AddressMode {
+typedef enum AddressMode {
+    UNDEFINED_MODE,
     IMPLICIT,
     ACCUMULATOR,
     IMMEDIATE,
@@ -21,444 +22,645 @@ enum AddressMode {
     INDIRECT,
     INDEXED_INDIRECT,
     INDIRECT_INDEXED,
-};
+} AddressMode;
 
-struct Instruction {
-    unsigned char code;
-    char code_name[3];
-    enum AddressMode address_mode;
-};
+typedef enum OpCode {
+    UNDEFINED_OP,
 
-enum OpCode {
     /**
      * ADC - ADd with Carry instruction
      */
-
-    ADC_ABSOLUTE         = 0x6d,
-    ADC_ABSOLUTE_X       = 0x7d,
-    ADC_ABSOLUTE_Y       = 0x79,
-    ADC_IMMEDIATE        = 0x69,
-    ADC_INDEXED_INDIRECT = 0x61,
-    ADC_INDIRECT_INDEXED = 0x71,
-    ADC_ZERO_PAGE        = 0x65,
-    ADC_ZERO_PAGE_X      = 0x75,
+    ADC,
 
     /**
      * AND - logical AND instruction
      */
-
-    AND_ABSOLUTE         = 0x2d,
-    AND_ABSOLUTE_X       = 0x3d,
-    AND_ABSOLUTE_Y       = 0x39,
-    AND_IMMEDIATE        = 0x29,
-    AND_INDEXED_INDIRECT = 0x21,
-    AND_INDIRECT_INDEXED = 0x31,
-    AND_ZERO_PAGE        = 0x25,
-    AND_ZERO_PAGE_X      = 0x35,
+    AND,
 
     /**
      * ASL - Arithmetic Shift Left instruction
      */
-
-    ASL_ABSOLUTE         = 0x0e,
-    ASL_ABSOLUTE_X       = 0x1e,
-    ASL_ACCUMULATOR      = 0x0a,
-    ASL_ZERO_PAGE        = 0x06,
-    ASL_ZERO_PAGE_X      = 0x16,
+    ASL,
 
     /**
      * BCC - Branch if Carry Clear instruction
      */
-
-    BCC_RELATIVE         = 0x90,
+    BCC,
 
     /**
      * BCS - Branch if Carry Set instruction
      */
-
-    BCS_RELATIVE         = 0xb0,
+    BCS,
 
     /**
      * BEQ - Branch if EQual instruction
      */
-    BEQ_RELATIVE         = 0xf0,
+    BEQ,
 
     /**
      * BIT - BIt test instruction
      */
-
-    BIT_ABSOLUTE         = 0x2c,
-    BIT_ZERO_PAGE        = 0x24,
+    BIT,
 
     /**
      * BMI - Branch if MInus instruction
      */
-
-    BMI_RELATIVE         = 0x30,
+    BMI,
 
     /**
      * BNE - Branch if Not Equal instruction
      */
-
-    BNE_RELATIVE         = 0xd0,
+    BNE,
 
     /**
      * BPL - Branch if Positive instruction
      */
-
-    BPL_RELATIVE         = 0x10,
+    BPL,
 
     /**
      * BRK - force interrupt (BReaK) instruction
      */
-
-    BRK_IMPLICIT         = 0x00,
+    BRK,
 
     /**
      * BVC - Branch if Overflow Clear instruction
      */
-
-    BVC_RELATIVE         = 0x50,
+    BVC,
 
     /**
      * BVS - Branch if Overflow Set instruction
      */
-
-    BVS_RELATIVE         = 0x70,
+    BVS,
 
     /**
      * CLC - CLear Carry flag instruction
      */
-
-    CLC_IMPLICIT         = 0x18,
+    CLC,
 
     /**
      * CLD - CLear Decimal mode instruction
      */
-
-    CLD_IMPLICIT         = 0xd8,
+    CLD,
 
     /**
      * CLI - CLear Interrupt disable instruction
      */
-
-    CLI_IMPLICIT         = 0x58,
+    CLI,
 
     /**
      * CLV - CLear oVerflow flag instruction
      */
-
-    CLV_IMPLICIT         = 0xb8,
+    CLV,
 
     /**
      * CMP - CoMPare instruction
      */
-
-    CMP_ABSOLUTE         = 0xcd,
-    CMP_ABSOLUTE_X       = 0xdd,
-    CMP_ABSOLUTE_Y       = 0xd9,
-    CMP_IMMEDIATE        = 0xc9,
-    CMP_INDEXED_INDIRECT = 0xc1,
-    CMP_INDIRECT_INDEXED = 0xd1,
-    CMP_ZERO_PAGE        = 0xc5,
-    CMP_ZERO_PAGE_X      = 0xd5,
+    CMP,
 
     /**
      * CPX - ComPare X register instruction
      */
-
-    CPX_ABSOLUTE         = 0xec,
-    CPX_IMMEDIATE        = 0xe0,
-    CPX_ZERO_PAGE        = 0xe4,
+    CPX,
 
     /**
      * CPY - ComPare Y register instruction
      */
-
-    CPY_ABSOLUTE         = 0xcc,
-    CPY_IMMEDIATE        = 0xc0,
-    CPY_ZERO_PAGE        = 0xc4,
+    CPY,
 
     /**
      * DEC - DECrement memory instruction
      */
-
-    DEC_ABSOLUTE         = 0xce,
-    DEC_ABSOLUTE_X       = 0xde,
-    DEC_ZERO_PAGE        = 0xc6,
-    DEC_ZERO_PAGE_X      = 0xd6,
+    DEC,
 
     /**
      * DEX - DEcrement X register instruction
      */
-
-    DEX_IMPLICIT         = 0xca,
+    DEX,
 
     /**
      * DEY - DEcrement Y register instruction
      */
-
-    DEY_IMPLICIT         = 0x88,
+    DEY,
 
     /**
      * EOR - logical Exclusive OR instruction
      */
-
-    EOR_ABSOLUTE         = 0x4d,
-    EOR_ABSOLUTE_X       = 0x5d,
-    EOR_ABSOLUTE_Y       = 0x59,
-    EOR_IMMEDIATE        = 0x49,
-    EOR_INDEXED_INDIRECT = 0x41,
-    EOR_INDIRECT_INDEXED = 0x51,
-    EOR_ZERO_PAGE        = 0x45,
-    EOR_ZERO_PAGE_X      = 0x55,
+    EOR,
 
     /**
      * INC - INCrement memory instruction
      */
-
-    INC_ABSOLUTE         = 0xee,
-    INC_ABSOLUTE_X       = 0xfe,
-    INC_ZERO_PAGE        = 0xe6,
-    INC_ZERO_PAGE_X      = 0xf6,
+    INC,
 
     /**
      * INX - INcrement X register instruction
      */
-
-    INX_IMPLICIT         = 0xe8,
+    INX,
 
     /**
      * INY - INcrement Y register instruction
      */
-
-    INY_IMPLICIT         = 0xc8,
+    INY,
 
     /**
      * JMP - JuMP instruction
      */
-
-    JMP_ABSOLUTE         = 0x4c,
-    JMP_INDIRECT         = 0x6c,
+    JMP,
 
     /**
      * JSR - Jump to SubRoutine instruction
      */
-
-    JSR_ABSOLUTE         = 0x20,
+    JSR,
 
     /**
      * LDA - LoaD Accumulator instruction
      */
-
-    LDA_ABSOLUTE         = 0xad,
-    LDA_ABSOLUTE_X       = 0xbd,
-    LDA_ABSOLUTE_Y       = 0xb9,
-    LDA_IMMEDIATE        = 0xa9,
-    LDA_INDEXED_INDIRECT = 0xa1,
-    LDA_INDIRECT_INDEXED = 0xb1,
-    LDA_ZERO_PAGE        = 0xa5,
-    LDA_ZERO_PAGE_X      = 0xb5,
+    LDA,
 
     /**
      * LDX - LoaD X register instruction
      */
-
-    LDX_ABSOLUTE         = 0xae,
-    LDX_ABSOLUTE_Y       = 0xbe,
-    LDX_IMMEDIATE        = 0xa2,
-    LDX_ZERO_PAGE        = 0xa6,
-    LDX_ZERO_PAGE_Y      = 0xb6,
+    LDX,
 
     /**
      * LDY - LoaD Y register instruction
      */
-
-    LDY_ABSOLUTE         = 0xac,
-    LDY_ABSOLUTE_X       = 0xbc,
-    LDY_IMMEDIATE        = 0xa0,
-    LDY_ZERO_PAGE        = 0xa4,
-    LDY_ZERO_PAGE_X      = 0xb4,
+    LDY,
 
     /**
      * LSR - Logical Shift Right instruction
      */
-
-    LSR_ABSOLUTE         = 0x4e,
-    LSR_ABSOLUTE_X       = 0x5e,
-    LSR_ACCUMULATOR      = 0x4a,
-    LSR_ZERO_PAGE        = 0x46,
-    LSR_ZERO_PAGE_X      = 0x56,
+    LSR,
 
     /**
      * NOP - No OPeration instruction
      */
-
-    NOP_IMPLICIT         = 0xea,
+    NOP,
 
     /**
      * ORA - logical inclusive OR on Accumulator instruction
      */
-
-    ORA_ABSOLUTE         = 0x0d,
-    ORA_ABSOLUTE_X       = 0x1d,
-    ORA_ABSOLUTE_Y       = 0x19,
-    ORA_IMMEDIATE        = 0x09,
-    ORA_INDEXED_INDIRECT = 0x01,
-    ORA_INDIRECT_INDEXED = 0x11,
-    ORA_ZERO_PAGE        = 0x05,
-    ORA_ZERO_PAGE_X      = 0x15,
+    ORA,
 
     /**
      * PHA - PusH Accumulator instruction
      */
-
-    PHA_IMPLICIT         = 0x48,
+    PHA,
 
     /**
      * PHP - PusH Processor status instruction
      */
-
-    PHP_IMPLICIT         = 0x08,
+    PHP,
 
     /**
      * PLA - PuLl Accumulator instruction
      */
-
-    PLA_IMPLICIT         = 0x68,
+    PLA,
 
     /**
      * PLP - PuLl Processor status instruction
      */
-
-    PLP_IMPLICIT         = 0x28,
+    PLP,
 
     /**
      * ROL - ROtate Left instruction
      */
-
-    ROL_ABSOLUTE         = 0x2e,
-    ROL_ABSOLUTE_X       = 0x3e,
-    ROL_ACCUMULATOR      = 0x2a,
-    ROL_ZERO_PAGE        = 0x26,
-    ROL_ZERO_PAGE_X      = 0x36,
+    ROL,
 
     /**
      * ROR - ROtate Right instruction
      */
-
-    ROR_ABSOLUTE         = 0x7e,
-    ROR_ABSOLUTE_X       = 0x6e,
-    ROR_ACCUMULATOR      = 0x6a,
-    ROR_ZERO_PAGE        = 0x66,
-    ROR_ZERO_PAGE_X      = 0x76,
+    ROR,
 
     /**
      * RTI - ReTurn from Interrupt instruction
      */
-
-    RTI_IMPLICIT         = 0x40,
+    RTI,
 
     /**
      * RTS - ReTurn from Subroutine instruction
      */
-
-    RTS_IMPLICIT         = 0x60,
+    RTS,
 
     /**
      * SBC - SuBtract with Carry instruction
      */
-
-    SBC_ABSOLUTE         = 0xed,
-    SBC_ABSOLUTE_X       = 0xfd,
-    SBC_ABSOLUTE_Y       = 0xf9,
-    SBC_IMMEDIATE        = 0xe9,
-    SBC_INDEXED_INDIRECT = 0xe1,
-    SBC_INDIRECT_INDEXED = 0xf1,
-    SBC_ZERO_PAGE        = 0xe5,
-    SBC_ZERO_PAGE_X      = 0xf5,
+    SBC,
 
     /**
      * SEC - SEt Carry flag instruction
      */
-
-    SEC_IMPLICIT         = 0x38,
+    SEC,
 
     /**
      * SED - SEt Decimal mode instruction
      */
-
-    SED_IMPLICIT         = 0xf8,
+    SED,
 
     /**
      * SEI - SEt Interrupt disable flag instruction
      */
-
-    SEI_IMPLICIT         = 0x78,
+    SEI,
 
     /**
      * STA - STore Accumulator instruction
      */
-
-    STA_ABSOLUTE         = 0x8d,
-    STA_ABSOLUTE_X       = 0x9d,
-    STA_ABSOLUTE_Y       = 0x99,
-    STA_INDEXED_INDIRECT = 0x81,
-    STA_INDIRECT_INDEXED = 0x91,
-    STA_ZERO_PAGE        = 0x85,
-    STA_ZERO_PAGE_X      = 0x95,
+    STA,
 
     /**
      * STX - STore X register instruction
      */
-
-    STX_ABSOLUTE         = 0x8e,
-    STX_ZERO_PAGE        = 0x86,
-    STX_ZERO_PAGE_Y      = 0x96,
+    STX,
 
     /**
      * STY - STore Y register instruction
      */
-
-    STY_ABSOLUTE         = 0x8c,
-    STY_ZERO_PAGE        = 0x84,
-    STY_ZERO_PAGE_X      = 0x94,
+    STY,
 
     /**
      * TAX - Transfer Accumulator to X register instruction
      */
-
-    TAX_IMPLICIT         = 0xaa,
+    TAX,
 
     /**
      * TAY - Transfer Accumulator to Y register instruction
      */
-
-    TAY_IMPLICIT         = 0xa8,
+    TAY,
 
     /**
      * TSX - Transfer Stack pointer to X register instruction
      */
-
-    TSX_IMPLICIT         = 0xba,
+    TSX,
 
     /**
      * TXA - Transfer X register to Accumulator instruction
      */
-
-    TXA_IMPLICIT         = 0x8a,
+    TXA,
 
     /**
      * TXS - Transfer X register to Stack pointer instruction
      */
-
-    TXS_IMPLICIT         = 0x9a,
+    TXS,
 
     /**
      * TYA - Transfer Y register to Accumulator instruction
      */
+    TYA,
 
-    TYA_IMPLICIT         = 0x98,
+} OpCode;
+
+typedef struct opcode_t {
+    OpCode code;
+    AddressMode mode;
+    const char name[3];
+} opcode_t;
+
+#define UNDEF_OPCODE {UNDEFINED_OP, UNDEFINED_MODE, ""}
+
+#define ADC_NAME "adc"
+#define AND_NAME "and"
+#define ASL_NAME "asl"
+#define BCC_NAME "bcc"
+#define BCS_NAME "bcs"
+#define BEQ_NAME "beq"
+#define BIT_NAME "bit"
+#define BMI_NAME "bmi"
+#define BNE_NAME "bne"
+#define BPL_NAME "bpl"
+#define BRK_NAME "brk"
+#define BVC_NAME "bvc"
+#define BVS_NAME "bvs"
+#define CLC_NAME "clc"
+#define CLD_NAME "cld"
+#define CLI_NAME "cli"
+#define CLV_NAME "clv"
+#define CMP_NAME "cmp"
+#define CPX_NAME "cpx"
+#define CPY_NAME "cpy"
+#define DEC_NAME "dec"
+#define DEX_NAME "dex"
+#define DEY_NAME "dey"
+#define EOR_NAME "eor"
+#define INC_NAME "inc"
+#define INX_NAME "inx"
+#define INY_NAME "iny"
+#define JMP_NAME "jmp"
+#define JSR_NAME "jsr"
+#define LDA_NAME "lda"
+#define LDX_NAME "ldx"
+#define LDY_NAME "ldy"
+#define LSR_NAME "lsr"
+#define NOP_NAME "nop"
+#define ORA_NAME "ora"
+#define PHA_NAME "pha"
+#define PHP_NAME "php"
+#define PLA_NAME "pla"
+#define PLP_NAME "plp"
+#define ROL_NAME "rol"
+#define ROR_NAME "ror"
+#define RTI_NAME "rti"
+#define RTS_NAME "rts"
+#define SBC_NAME "sbc"
+#define SEC_NAME "sec"
+#define SED_NAME "sed"
+#define SEI_NAME "sei"
+#define STA_NAME "sta"
+#define STX_NAME "stx"
+#define STY_NAME "sty"
+#define TAX_NAME "tax"
+#define TAY_NAME "tay"
+#define TSX_NAME "tsx"
+#define TXA_NAME "txa"
+#define TXS_NAME "txs"
+#define TYA_NAME "tya"
+
+static opcode_t opcodes[UINT8_MAX] = {
+    /* 0x0X instructions */
+    {BRK, IMPLICIT, BRK_NAME},
+    {ORA, INDEXED_INDIRECT, ORA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ORA, ZERO_PAGE, ORA_NAME},
+    {ASL, ZERO_PAGE, ASL_NAME},
+    UNDEF_OPCODE,
+    {PHP, IMPLICIT, PHP_NAME},
+    {ORA, IMMEDIATE, ORA_NAME},
+    {ASL, ACCUMULATOR, ASL_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ORA, ABSOLUTE, ORA_NAME},
+    {ASL, ABSOLUTE, ASL_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x1X instructions */
+    {BPL, RELATIVE, BPL_NAME},
+    {ORA, INDIRECT_INDEXED, ORA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ORA, ZERO_PAGE_X, ORA_NAME},
+    {ASL, ZERO_PAGE_X, ASL_NAME},
+    UNDEF_OPCODE,
+    {CLC, IMPLICIT, CLC_NAME},
+    {ORA, ABSOLUTE_Y, ORA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ORA, ABSOLUTE_X, ORA_NAME},
+    {ASL, ABSOLUTE_X, ASL_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x2X instructions */
+    {JSR, ABSOLUTE, JSR_NAME},
+    {AND, INDEXED_INDIRECT, AND_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {BIT, ZERO_PAGE, BIT_NAME},
+    {AND, ZERO_PAGE, AND_NAME},
+    {ROL, ZERO_PAGE, ROL_NAME},
+    UNDEF_OPCODE,
+    {PLP, IMPLICIT, PLP_NAME},
+    {AND, IMMEDIATE, AND_NAME},
+    {ROL, ACCUMULATOR, ROL_NAME},
+    UNDEF_OPCODE,
+    {BIT, ABSOLUTE, BIT_NAME},
+    {AND, ABSOLUTE, AND_NAME},
+    {ROL, ABSOLUTE, ROL_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x3X instructions */
+    {BMI, RELATIVE, BMI_NAME},
+    {AND, INDIRECT_INDEXED, AND_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {AND, ZERO_PAGE_X, AND_NAME},
+    {ROL, ZERO_PAGE_X, ROL_NAME},
+    UNDEF_OPCODE,
+    {SEC, IMPLICIT, SEC_NAME},
+    {AND, ABSOLUTE_Y, AND_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {AND, ABSOLUTE_X, AND_NAME},
+    {ROL, ABSOLUTE_X, ROL_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x4X instructions */
+    {RTI, IMPLICIT, RTI_NAME},
+    {EOR, INDEXED_INDIRECT, EOR_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {EOR, ZERO_PAGE, EOR_NAME},
+    {LSR, ZERO_PAGE, LSR_NAME},
+    UNDEF_OPCODE,
+    {PHA, IMPLICIT, PHA_NAME},
+    {EOR, IMMEDIATE, EOR_NAME},
+    {LSR, ACCUMULATOR, LSR_NAME},
+    UNDEF_OPCODE,
+    {JMP, ABSOLUTE, JMP_NAME},
+    {EOR, ABSOLUTE, EOR_NAME},
+    {LSR, ABSOLUTE, LSR_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x5X instructions */
+    {BVC, RELATIVE, BVC_NAME},
+    {EOR, INDIRECT_INDEXED, EOR_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {EOR, ZERO_PAGE_X, EOR_NAME},
+    {LSR, ZERO_PAGE_X, LSR_NAME},
+    UNDEF_OPCODE,
+    {CLI, IMPLICIT, CLI_NAME},
+    {EOR, ABSOLUTE_Y, EOR_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {EOR, ABSOLUTE_X, EOR_NAME},
+    {LSR, ABSOLUTE_X, LSR_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x6X instructions */
+    {RTS, IMPLICIT, RTS_NAME},
+    {ADC, INDEXED_INDIRECT, ADC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ADC, ZERO_PAGE, ADC_NAME},
+    {ROR, ZERO_PAGE, ROR_NAME},
+    UNDEF_OPCODE,
+    {PLA, IMPLICIT, PLA_NAME},
+    {ADC, IMMEDIATE, ADC_NAME},
+    {ROR, ACCUMULATOR, ROR_NAME},
+    UNDEF_OPCODE,
+    {JMP, INDIRECT, JMP_NAME},
+    {ADC, ABSOLUTE, ADC_NAME},
+    {ROR, ABSOLUTE, ROR_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x7X instructions */
+    {BVS, RELATIVE, BVS_NAME},
+    {ADC, INDIRECT_INDEXED, ADC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ADC, ZERO_PAGE_X, ADC_NAME},
+    {ROR, ZERO_PAGE_X, ROR_NAME},
+    UNDEF_OPCODE,
+    {SEI, IMPLICIT, SEI_NAME},
+    {ADC, ABSOLUTE_Y, ADC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {ADC, ABSOLUTE_X, ADC_NAME},
+    {ROR, ABSOLUTE_X, ROR_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x8A instructions */
+    UNDEF_OPCODE,
+    {STA, INDEXED_INDIRECT, STA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {STY, ZERO_PAGE, STY_NAME},
+    {STA, ZERO_PAGE, STA_NAME},
+    {STX, ZERO_PAGE, STX_NAME},
+    UNDEF_OPCODE,
+    {DEY, IMPLICIT, DEY_NAME},
+    UNDEF_OPCODE,
+    {TXA, IMPLICIT, TXA_NAME},
+    UNDEF_OPCODE,
+    {STY, ABSOLUTE, STY_NAME},
+    {STA, ABSOLUTE, STA_NAME},
+    {STX, ABSOLUTE, STX_NAME},
+    UNDEF_OPCODE,
+
+    /* 0x9A instructions */
+    {BCC, RELATIVE, BCC_NAME},
+    {STA, INDIRECT_INDEXED, STA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {STY, ZERO_PAGE_X, STY_NAME},
+    {STA, ZERO_PAGE_X, STA_NAME},
+    {STX, ZERO_PAGE_Y, STX_NAME},
+    UNDEF_OPCODE,
+    {TYA, IMPLICIT, TYA_NAME},
+    {STA, ABSOLUTE_Y, STA_NAME},
+    {TXS, IMPLICIT, TXS_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {STA, ABSOLUTE_X, STA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+
+    /* 0xAX instructions */
+    {LDY, IMMEDIATE, LDY_NAME},
+    {LDA, INDEXED_INDIRECT, LDA_NAME},
+    {LDX, IMMEDIATE, LDX_NAME},
+    UNDEF_OPCODE,
+    {LDY, ZERO_PAGE, LDY_NAME},
+    {LDA, ZERO_PAGE, LDA_NAME},
+    {LDX, ZERO_PAGE, LDX_NAME},
+    UNDEF_OPCODE,
+    {TAY, IMPLICIT, TAY_NAME},
+    {LDA, IMMEDIATE, LDA_NAME},
+    {TAX, IMPLICIT, TAX_NAME},
+    UNDEF_OPCODE,
+    {LDY, ABSOLUTE, LDY_NAME},
+    {LDA, ABSOLUTE, LDA_NAME},
+    {LDX, ABSOLUTE, LDX_NAME},
+    UNDEF_OPCODE,
+
+    /* 0xBX instructions */
+    {BCS, RELATIVE, BCS_NAME},
+    {LDA, INDIRECT_INDEXED, LDA_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {LDY, ZERO_PAGE_X, LDY_NAME},
+    {LDA, ZERO_PAGE_X, LDA_NAME},
+    {LDX, ZERO_PAGE_Y, LDX_NAME},
+    UNDEF_OPCODE,
+    {CLV, IMPLICIT, CLV_NAME},
+    {LDA, ABSOLUTE_Y, LDA_NAME},
+    {TSX, IMPLICIT, TSX_NAME},
+    UNDEF_OPCODE,
+    {LDY, ABSOLUTE_X, LDY_NAME},
+    {LDA, ABSOLUTE_X, LDA_NAME},
+    {LDX, ABSOLUTE_Y, LDX_NAME},
+    UNDEF_OPCODE,
+
+    /* 0xCX instructions */
+    {CPY, IMMEDIATE, CPY_NAME},
+    {CMP, INDEXED_INDIRECT, CMP_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {CPY, ZERO_PAGE, CPY_NAME},
+    {CMP, ZERO_PAGE, CMP_NAME},
+    {DEC, ZERO_PAGE, DEC_NAME},
+    UNDEF_OPCODE,
+    {INY, IMPLICIT, INY_NAME},
+    {CMP, IMMEDIATE, CMP_NAME},
+    {DEX, IMPLICIT, DEX_NAME},
+    UNDEF_OPCODE,
+    {CPY, ABSOLUTE, CPY_NAME},
+    {CMP, ABSOLUTE, CMP_NAME},
+    {DEC, ABSOLUTE, DEC_NAME},
+    UNDEF_OPCODE,
+
+    /* 0xDX instructions */
+    {BNE, RELATIVE, BNE_NAME},
+    {CMP, INDIRECT_INDEXED, CMP_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {CMP, ZERO_PAGE_X, CMP_NAME},
+    {DEC, ZERO_PAGE_X, DEC_NAME},
+    UNDEF_OPCODE,
+    {CLD, IMPLICIT, CLD_NAME},
+    {CMP, ABSOLUTE_Y, CMP_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {CMP, ABSOLUTE_X, CMP_NAME},
+    {DEC, ABSOLUTE_X, DEC_NAME},
+    UNDEF_OPCODE,
+
+    /* 0xEX instructions */
+    {CPX, IMMEDIATE, CPX_NAME},
+    {SBC, INDEXED_INDIRECT, SBC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {CPX, ZERO_PAGE, CPX_NAME},
+    {SBC, ZERO_PAGE, SBC_NAME},
+    {INC, ZERO_PAGE, INC_NAME},
+    UNDEF_OPCODE,
+    {INX, IMPLICIT, INX_NAME},
+    {SBC, IMMEDIATE, SBC_NAME},
+    {NOP, IMPLICIT, NOP_NAME},
+    UNDEF_OPCODE,
+    {CPX, ABSOLUTE, CPX_NAME},
+    {SBC, ABSOLUTE, SBC_NAME},
+    {INC, ABSOLUTE, INC_NAME},
+    UNDEF_OPCODE,
+
+    /* 0xFX instructions */
+    {BEQ, RELATIVE, BEQ_NAME},
+    {SBC, INDIRECT_INDEXED, SBC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {SBC, ZERO_PAGE_X, SBC_NAME},
+    {INC, ZERO_PAGE_X, INC_NAME},
+    UNDEF_OPCODE,
+    {SED, IMPLICIT, SED_NAME},
+    {SBC, ABSOLUTE_Y, SBC_NAME},
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    UNDEF_OPCODE,
+    {SBC, ABSOLUTE_X, SBC_NAME},
+    {INC, ABSOLUTE_X, INC_NAME},
 };
 
-#endif //SFEMU2_OPCODES_H
+#endif //INC_65EMU2_OPCODES_H
