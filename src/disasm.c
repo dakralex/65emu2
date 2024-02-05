@@ -254,7 +254,7 @@ disassemble (const uint8_t* buf, size_t fsize, FILE* dest)
         break;
       case SEC_IMPLICIT:
         print_implicit (dest, "sec");
-        op_len = 2;
+        op_len = 1;
         break;
       case AND_ABSOLUTE_Y:
         print_absolute_y (dest, code, "and");
