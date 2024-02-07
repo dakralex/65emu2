@@ -9,16 +9,109 @@
 
 typedef enum AddressMode {
     UNDEFINED_MODE,
+
+    /**
+     * Implicit mode
+     *
+     * Instructions in implicit addressing mode do not have any operand as they
+     * work on a specific location that is implied by the instruction itself,
+     * e.g. CLC clears the carry flag in the processor status register.
+     */
     IMPLICIT,
+
+    /**
+     * Accumulator mode
+     *
+     * Instructions in accumulator addressing mode do not have any operand as
+     * they work on the accumulator register.
+     */
     ACCUMULATOR,
+
+    /**
+     * Immediate value mode
+     *
+     * Instructions in immediate addressing mode have a single byte constant
+     * operand, which is used as a value for the instruction itself instead of
+     * fetching a specific memory location.
+     */
     IMMEDIATE,
+
+    /**
+     * Zero paging
+     *
+     * Instructions in zero page addressing mode work with a single byte
+     * operand, which is used to fetch a memory location in the first 256 bytes
+     * of memory (as that is the limit on what can be addressed with a single
+     * byte).
+     */
     ZERO_PAGE,
+
+    /**
+     * Zero paging + X index register
+     *
+     * Instructions in zero page X addressing mode work with a single byte
+     * operand, which the current value of the X index register is added to and
+     * then used to calculate a zero page address, that is the resulting memory
+     * address is byte-sized and therefore cannot exceed 0xFF.
+     */
     ZERO_PAGE_X,
+
+    /**
+     * Zero Paging + Y index register
+     *
+     * Instructions in zero page Y addressing mode work with a single byte
+     * operand, which the current value of the Y index register is added to and
+     * then used to calculate a zero page address, that is the resulting memory
+     * address is byte-sized and therefore cannot exceed 0xFF.
+     */
     ZERO_PAGE_Y,
+
+    /**
+     * Relative addressing
+     *
+     * Instructions in relative addressing mode (which are only branch
+     * instructions) work with a single byte operand, which is a signed byte
+     * integer to calculate the relative memory location for the program
+     * counter if the condition is true.
+     */
     RELATIVE,
+
+    /**
+     * Absolute addressing
+     *
+     * Instructions in absolute addressing mode work with a double byte
+     * operand, which is used for fetching any specified memory location.
+     */
     ABSOLUTE,
+
+    /**
+     * Absolute addressing + X index register
+     *
+     * Instructions in absolute X addressing mode work with a double byte
+     * operand, which the current value of the X index register is added to and
+     * then used to calculate any memory location, which will be used for the
+     * instruction.
+     */
     ABSOLUTE_X,
+
+    /**
+     * Absolute addressing + Y index register
+     *
+     * Instructions in absolute Y addressing mode work with a double byte
+     * operand, which the current value of the Y index register is added to and
+     * then used to calculate any memory location, which will be used for the
+     * instruction.
+     */
     ABSOLUTE_Y,
+
+    /**
+     * Indirection addressing
+     *
+     * Instructions in indirect addressing mode work with a double byte operand,
+     * which is used to fetch a memory location whose value is used as the
+     * actual target value. This addressing mode is only available for the JMP
+     * instruction.
+     */
     INDIRECT,
     INDEXED_INDIRECT,
     INDIRECT_INDEXED,
