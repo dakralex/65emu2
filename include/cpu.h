@@ -4,19 +4,20 @@
  * CPU state management and interface for emulated MOS 6502.
  */
 
-#ifndef SFEMU2_CPU_H
-#define SFEMU2_CPU_H
+#ifndef INC_65EMU2_CPU_H
+#define INC_65EMU2_CPU_H
 
 #include <inttypes.h>
+#include "memory.h"
 
-struct CPU {
-    int8_t acc;                           /* Accumulator register A */
+typedef struct cpu_t {
+    uint8_t acc;                          /* Accumulator register A */
 
-    int8_t idx_x;                         /* Index register X */
-    int8_t idx_y;                         /* Index register Y */
-    int8_t sp;                            /* Stack pointer */
+    uint8_t idx_x;                        /* Index register X */
+    uint8_t idx_y;                        /* Index register Y */
+    uint8_t sp;                           /* Stack pointer */
 
-    int16_t pc;                           /* Program counter */
+    uint16_t pc;                          /* Program counter */
 
     unsigned int s_negative  : 1;         /* Negative flag */
     unsigned int s_overflow  : 1;         /* Overflow flag */
@@ -26,6 +27,9 @@ struct CPU {
     unsigned int s_interrupt : 1;         /* Interrupt flag */
     unsigned int s_zero      : 1;         /* Zero flag */
     unsigned int s_carry     : 1;         /* Carry flag */
-};
+} cpu_t;
 
-#endif //SFEMU2_CPU_H
+void
+tick (cpu_t* state, mem_t* mem);
+
+#endif //INC_65EMU2_CPU_H
